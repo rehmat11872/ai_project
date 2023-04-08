@@ -1,0 +1,16 @@
+<h1>All Generated Images</h1>
+<ul>
+{% for image in images %}
+  <li>
+    <img src="{{ image.image.url }}" alt="{{ image.text_input }}">
+    <p>{{ image.text_input }}</p>
+    <form method="POST" action="{% url 'save_like' %}">
+      {% csrf_token %}
+      <input type="hidden" name="image_id" value="{{ image.id }}">
+      <button type="submit">Save Like</button>
+    </form>
+  </li>
+{% empty %}
+  <li>No images found.</li>
+{% endfor %}
+</ul>

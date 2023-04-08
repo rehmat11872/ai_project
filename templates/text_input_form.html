@@ -1,0 +1,13 @@
+<!-- templates/text_input_form.html -->
+
+<form method="POST" action="{% url 'generate_image' %}">
+    {% csrf_token %}
+    <input type="text" name="text_input">
+    <button type="submit">Generate Image</button>
+
+    {% if generated_image %}
+  <h2>Generated Image</h2>
+  <img src="{{ image_url }}">
+{% endif %}
+
+</form>

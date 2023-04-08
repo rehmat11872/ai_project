@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    'django.contrib.sites',
+     #as a swagger
+     'drf_yasg',
      #app
      'accounts',
      'generate_image',

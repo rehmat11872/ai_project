@@ -6,6 +6,7 @@ ai_project
 Brief description of the project.
 
 Clone the repository
+git clone https://github.com/rehmat11872/Image_generator_backend.git
 
 Navigate to the project directory.
 cd ai_project
