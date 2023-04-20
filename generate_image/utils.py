@@ -4,7 +4,7 @@ import base64
 from django.core.files.base import ContentFile
 from .models import GeneratedImage
 
-def generate_image(text_input, user):
+def generate_image(text_input, negative_input, num_images, style, user):
     engine_id = "stable-diffusion-v1-5"
     api_host = os.getenv('API_HOST')
     # STABILITY_API_KEY = 'sk-73T7xGAhj5fG0NNUaPcO1BCbzQ434yICdSW1aV2w7TrdAggA'
@@ -17,15 +17,21 @@ def generate_image(text_input, user):
     payload = {
         "text_prompts": [
             {
-                "text": text_input
-            }
+                "text": text_input,
+                "class": "pos"  # positive prompt
+            },
+              {
+            "text": negative_input,
+            "class": "neg"  # negative prompt
+        }
         ],
         "cfg_scale": 7,
         "clip_guidance_preset": "FAST_BLUE",
         "height": 512,
         "width": 512,
-        "samples": 1,
+        "samples": num_images,
         "steps": 30,
+        "style": style,  # use the "Anime Style"
     }
 
     headers = {
@@ -49,10 +55,40 @@ def generate_image(text_input, user):
     for i, image in enumerate(data["artifacts"]):
         image_data = base64.b64decode(image["base64"])
         file_name = f"v1_txt2img_{i}.png"
-        generated_image = GeneratedImage(text_input=text_input,  user=user)
+        generated_image = GeneratedImage(text_input=text_input, negative_prompt=negative_input, style=style, number_of_images=num_images,  user=user)
         generated_image.image.save(file_name, ContentFile(image_data), save=True)
 
     # Get the URL of the generated image
     image_url = generated_image.image.url
 
     return image_url
+
+
+    # # Add the positive prompt if it was filled out by the user
+    # if text_input:
+    #     text_prompts.append({
+    #         "text": text_input,
+    #         "class": "pos"  # positive prompt
+    #     })
+
+    # # Add the negative prompt if it was filled out by the user
+    # if negative_input:
+    #     text_prompts.append({
+    #         "text": negative_input,
+    #         "class": "neg"  # negative prompt
+    #     })
+
+    # # Make sure at least one prompt was provided
+    # if not text_prompts:
+    #     raise Exception("At least one prompt is required.")
+# Anime
+# Line art
+# Photographic
+# Digital art
+# Comic book
+# Pixel art
+# 3D model
+# Cinematic
+# Craft
+# Clay
+# Low poly
