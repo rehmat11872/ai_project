@@ -31,12 +31,20 @@ class GenerateImageView(APIView):
         negative_input = request.POST.get('negative_input')
         num_images = int(request.POST.get('num_images', 1)) 
         style = request.POST.get('style')
-        user = request.POST.get('user')
+        user_id = request.POST.get('user')
+
+        if user_id:
+            print('test')
+            user = User.objects.get(id=user_id)
+        else:
+            print('test1')
+            user = None
 
         
         # Generate the image using the util function
-        user = User.objects.get(id=user)
+        # user = User.objects.get(id=user)
         image_url = generate_image(text_input, negative_input, num_images, style, user=user, )
+        
 
 
         # Return a JSON response with the image URL
