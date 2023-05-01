@@ -56,16 +56,25 @@ def generate_image(text_input, num_images, style, user):
     data = response.json()
 
     # Save the generated image to a Django model
+    # for i, image in enumerate(data["artifacts"]):
+    #     image_data = base64.b64decode(image["base64"])
+    #     file_name = f"v1_txt2img_{i}.png"
+    #     generated_image = GeneratedImage(text_input=text_input, negative_prompt='negative_input', style=style, number_of_images=num_images,  user=user)
+    #     generated_image.image.save(file_name, ContentFile(image_data), save=True)
+
+    # # Get the URL of the generated image
+    # image_url = generated_image.image.url
+
+    image_urls = []
     for i, image in enumerate(data["artifacts"]):
         image_data = base64.b64decode(image["base64"])
         file_name = f"v1_txt2img_{i}.png"
         generated_image = GeneratedImage(text_input=text_input, negative_prompt='negative_input', style=style, number_of_images=num_images,  user=user)
         generated_image.image.save(file_name, ContentFile(image_data), save=True)
-
-    # Get the URL of the generated image
-    image_url = generated_image.image.url
-
-    return image_url
+        image_url = generated_image.image.url
+        image_urls.append(image_url)
+    print(image_urls, 'urls____')
+    return image_urls
 
 
     # # Add the positive prompt if it was filled out by the user

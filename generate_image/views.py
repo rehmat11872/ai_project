@@ -48,18 +48,25 @@ class GenerateImageView(APIView):
         
         # Generate the image using the util function
         # user = User.objects.get(id=user)
-        image_url = generate_image(text_input,  num_images, style, user=user, )
+        image_urls = generate_image(text_input,  num_images, style, user=user, )
         
 
 
         # Return a JSON response with the image URL
 
          # Get the full URL of the generated image
-        image_path = image_url.replace(settings.MEDIA_URL, "")
-        full_url = request.build_absolute_uri(settings.MEDIA_URL + image_path)
+        # image_path = image_urls.replace(settings.MEDIA_URL, "")
+        # full_url = request.build_absolute_uri(settings.MEDIA_URL + image_path)
 
-        # Return a JSON response with the full image URL
-        response_data = {'image_url': full_url}
+        # # Return a JSON response with the full image URL
+        # response_data = {'image_url': full_url}
+
+            # Return a JSON response with the image URLs
+        response_data = {'image_urls': []}
+        for image_url in image_urls:
+            image_path = image_url.replace(settings.MEDIA_URL, "")
+            full_url = request.build_absolute_uri(settings.MEDIA_URL + image_path)
+            response_data['image_urls'].append(full_url)
         
         # response_data = {'image_url': image_url}
         return JsonResponse(response_data)
