@@ -1,6 +1,7 @@
 import os
 import requests
 from django.core.files.base import ContentFile
+from django.conf import settings
 import io
 from django.shortcuts import render
 from .utils import generate_image
@@ -24,31 +25,43 @@ class GenerateImageView(APIView):
     # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        print(self.request.data, 'data')
         print(self.request.user, 'request')
         # Get the text input from the form
-        text_input = request.POST.get('text_input')
-        print(text_input, 'text______image')
-        negative_input = request.POST.get('negative_input')
-        num_images = int(request.POST.get('num_images', 1)) 
-        style = request.POST.get('style')
-        user_id = request.POST.get('user')
+        # text_input = request.POST.get('text_input')
+        # negative_input = request.POST.get('negative_input')
+        # num_images = int(request.POST.get('num_images', 1)) 
+        # style = request.POST.get('style')
+        # user_id = request.POST.get('user')
+
+        data = request.data
+        text_input = data.get('text_input')
+        num_images = int(data.get('num_images', 1))
+        style = data.get('style')
+        user_id = data.get('user')
 
         if user_id:
-            print('test')
             user = User.objects.get(id=user_id)
         else:
-            print('test1')
             user = None
 
         
         # Generate the image using the util function
         # user = User.objects.get(id=user)
-        image_url = generate_image(text_input, negative_input, num_images, style, user=user, )
+        image_url = generate_image(text_input,  num_images, style, user=user, )
         
 
 
         # Return a JSON response with the image URL
-        response_data = {'image_url': image_url}
+
+         # Get the full URL of the generated image
+        image_path = image_url.replace(settings.MEDIA_URL, "")
+        full_url = request.build_absolute_uri(settings.MEDIA_URL + image_path)
+
+        # Return a JSON response with the full image URL
+        response_data = {'image_url': full_url}
+        
+        # response_data = {'image_url': image_url}
         return JsonResponse(response_data)
     
 

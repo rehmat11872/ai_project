@@ -4,8 +4,11 @@ import base64
 from django.core.files.base import ContentFile
 from .models import GeneratedImage
 
-def generate_image(text_input, negative_input, num_images, style, user):
-    engine_id = "stable-diffusion-v1-5"
+def generate_image(text_input, num_images, style, user):
+    # engine_id = "stable-diffusion-v1-5"
+    engine_id = "stable-diffusion-xl-beta-v2-2-2"
+
+    # engine_id="stable-diffusion-xl-beta-v2-2-2"
     api_host = os.getenv('API_HOST')
     # STABILITY_API_KEY = 'sk-73T7xGAhj5fG0NNUaPcO1BCbzQ434yICdSW1aV2w7TrdAggA'
     # api_key = STABILITY_API_KEY
@@ -20,10 +23,10 @@ def generate_image(text_input, negative_input, num_images, style, user):
                 "text": text_input,
                 "class": "pos"  # positive prompt
             },
-              {
-            "text": negative_input,
-            "class": "neg"  # negative prompt
-        }
+        #       {
+        #     "text": negative_input,
+        #     "class": "neg"  # negative prompt
+        # }
         ],
         "cfg_scale": 7,
         "clip_guidance_preset": "FAST_BLUE",
@@ -31,7 +34,8 @@ def generate_image(text_input, negative_input, num_images, style, user):
         "width": 512,
         "samples": num_images,
         "steps": 30,
-        "style": style,  # use the "Anime Style"
+        # 'style':style,
+        "style_preset": style,  # use the "Anime Style"
     }
 
     headers = {
@@ -55,7 +59,7 @@ def generate_image(text_input, negative_input, num_images, style, user):
     for i, image in enumerate(data["artifacts"]):
         image_data = base64.b64decode(image["base64"])
         file_name = f"v1_txt2img_{i}.png"
-        generated_image = GeneratedImage(text_input=text_input, negative_prompt=negative_input, style=style, number_of_images=num_images,  user=user)
+        generated_image = GeneratedImage(text_input=text_input, negative_prompt='negative_input', style=style, number_of_images=num_images,  user=user)
         generated_image.image.save(file_name, ContentFile(image_data), save=True)
 
     # Get the URL of the generated image

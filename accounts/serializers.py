@@ -25,6 +25,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data['email'] = self.user.email
         data['created_at'] = self.user.created_at
+        data['id'] = self.user.id
         token = Token.objects.get(user=self.user)
         token_to_str = str(token)
         token_to_json = json.dumps(token_to_str)
