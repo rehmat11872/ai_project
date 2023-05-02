@@ -112,13 +112,13 @@ class UpscaleImageView(View):
         return Response({"url": upscaled_image.image.url})
 
 class GalleryImageListView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticated]
-    queryset = GeneratedImage.objects.all()
+    permission_classes = [IsAuthenticated]
+    # queryset = GeneratedImage.objects.all()
     serializer_class = GalleryImageSerializer
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return GeneratedImage.objects.filter(user=user)    
+    def get_queryset(self):
+        user = self.request.user
+        return GeneratedImage.objects.filter(user=user)    
 
 
 class LikeImageView(generics.ListCreateAPIView):
@@ -141,5 +141,11 @@ class LikeImageView(generics.ListCreateAPIView):
     
 
 class DisplayLikeImageView(generics.ListAPIView):
-    queryset = Like.objects.all()
+    permission_classes = [IsAuthenticated]
+    # queryset = Like.objects.all()
     serializer_class = LikeSerializer
+
+
+    def get_queryset(self):
+        user = self.request.user
+        return Like.objects.filter(user=user)    
