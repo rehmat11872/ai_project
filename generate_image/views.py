@@ -12,7 +12,7 @@ from .models import *
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .serializers import GalleryImageSerializer, LikeSerializer
+from .serializers import GalleryImageSerializer, LikeSerializer, SaveLikeSerializer
 from django.views import View
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -126,11 +126,16 @@ class LikeImageView(generics.ListCreateAPIView):
     serializer_class = LikeSerializer
     
     def post(self, request, *args, **kwargs):
-        image = get_object_or_404(GeneratedImage, id=self.kwargs['pk'])
+        data = request.data
+        image_id = data.get('image_id')
+        if not image_id:
+            return Response({'error': 'Image ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        image = get_object_or_404(GeneratedImage, id=image_id)
         user = request.user
         
         # Check if the user has already liked the image
-        if Like.objects.filter(user=user, image=image).exists():
+        if Like.objects.filter(image=image).exists():
             return Response({'error': 'You have already liked this image.'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Add a new like to the image
@@ -138,12 +143,12 @@ class LikeImageView(generics.ListCreateAPIView):
         like.save()
         
         return Response({'success': 'Image liked successfully.'}, status=status.HTTP_201_CREATED)
-    
+
 
 class DisplayLikeImageView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     # queryset = Like.objects.all()
-    serializer_class = LikeSerializer
+    serializer_class = SaveLikeSerializer
 
 
     def get_queryset(self):

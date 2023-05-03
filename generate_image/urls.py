@@ -8,7 +8,7 @@ urlpatterns = [
     #Gallery Image
     path('gallery/images/', GalleryImageListView.as_view(), name='gallery_image'),
     #like api
-    path('images/like/<int:pk>/', LikeImageView.as_view(), name='like_image'),
+    path('images/like/', LikeImageView.as_view(), name='like_image'),
     path('list/like/images/', DisplayLikeImageView.as_view(), name='list_like_image'),
 
     #upscale image
