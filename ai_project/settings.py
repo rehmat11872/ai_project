@@ -189,4 +189,20 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # replace with your React application domain
+]
+
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'raorehmat11@gmail.com' # Replace with your email address
+EMAIL_HOST_PASSWORD='wpmgynkchvbkgcii'
+# Email settings for the admin
+ADMIN_EMAIL = 'raorehmat11@gmail.com' # admin email address

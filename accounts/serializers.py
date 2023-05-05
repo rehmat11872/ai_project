@@ -33,3 +33,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['token'] = token_to_load
         data['message'] = 'sucessfull'
         return data
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'email', 'credit']    
+
+
+
+class BuyCreditSerializer(serializers.Serializer):
+    num_credits = serializers.IntegerField()
+

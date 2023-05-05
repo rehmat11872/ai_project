@@ -25,32 +25,34 @@ class GenerateImageView(APIView):
     # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(self.request.data, 'data')
-        print(self.request.user, 'request')
-        # Get the text input from the form
-        # text_input = request.POST.get('text_input')
-        # negative_input = request.POST.get('negative_input')
-        # num_images = int(request.POST.get('num_images', 1)) 
-        # style = request.POST.get('style')
-        # user_id = request.POST.get('user')
-
         data = request.data
         text_input = data.get('text_input')
         num_images = int(data.get('num_images', 1))
         style = data.get('style')
         user_id = data.get('user')
 
-        if user_id:
-            user = User.objects.get(id=user_id)
-        else:
-            user = None
+        if not user_id:
+            return Response({'error': 'User is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.get(id=user_id)
+
+        # if user_id:
+        #     user = User.objects.get(id=user_id)
+        # else:
+        #     user = None
+
+        if user.credit < num_images:
+            return Response({'error': 'No more credits. Please buy more credits.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         
         # Generate the image using the util function
         # user = User.objects.get(id=user)
         image_urls = generate_image(text_input,  num_images, style, user=user, )
         
-
+                # Deduct 1 credit from the user's remaining credit
+        user.credit -= num_images
+        user.save()
 
         # Return a JSON response with the image URL
 
