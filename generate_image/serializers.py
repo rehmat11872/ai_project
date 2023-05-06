@@ -4,7 +4,7 @@ from django.conf import settings
 class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneratedImage
-        fields = ['image']
+        fields = ['id', 'image']
         
     def to_representation(self, instance):
         """

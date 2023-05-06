@@ -15,6 +15,8 @@ urlpatterns = [
     path('upscale/images/', UpscaleImageView.as_view(), name='upscale_image'),
 
 
+
+
     
 
     #Dashboard

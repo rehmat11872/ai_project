@@ -42,7 +42,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('api/', include('generate_image.urls')),
 
-    
+    path('', include('credit.urls')),
 
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

@@ -156,3 +156,5 @@ class DisplayLikeImageView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Like.objects.filter(user=user)    
+
+

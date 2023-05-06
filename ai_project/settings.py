@@ -54,6 +54,7 @@ INSTALLED_APPS = [
      #app
      'accounts',
      'generate_image',
+     'credit',
 ]
 
 # MIDDLEWARE = [
