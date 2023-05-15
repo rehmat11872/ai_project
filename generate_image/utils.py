@@ -7,12 +7,17 @@ from .models import GeneratedImage
 def generate_image(text_input, num_images, style, user):
     # engine_id = "stable-diffusion-v1-5"
     engine_id = "stable-diffusion-xl-beta-v2-2-2"
+    API_HOST = 'https://api.stability.ai'
 
     # engine_id="stable-diffusion-xl-beta-v2-2-2"
-    api_host = os.getenv('API_HOST')
+    # api_host = os.getenv('API_HOST')
+    api_host = API_HOST
     # STABILITY_API_KEY = 'sk-73T7xGAhj5fG0NNUaPcO1BCbzQ434yICdSW1aV2w7TrdAggA'
     # api_key = STABILITY_API_KEY
-    api_key = os.getenv('STABILITY_API_KEY')
+    # api_key = os.getenv('STABILITY_API_KEY')
+    STABILITY_API_KEY='sk-0R9i9jdidTSpAIKYEsQpv5Tv2Mvpc0GvFcS2xpgC8D5ay8sq'
+
+    api_key = STABILITY_API_KEY
 
     if api_key is None:
         raise Exception("Missing Stability API key.")
