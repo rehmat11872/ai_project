@@ -32,7 +32,7 @@ SECRET_KEY='django-insecure-^p%*mzv64#6kh!tv7==7t@me#^7&q!&-m_e_ik9lw9$(j)bfu%'
 DEBUG = True
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://ArtGenerator.pythonanywhere.com/']
 
 
 # Application definition
